@@ -10,11 +10,21 @@ const { JSDOM } = require('jsdom');
 
 
 /**    Main variables    */
-const MIN_CID = 0;
-const MAX_CID = 115; // Has been unsuccessfull after ~110.
 const OWNER_NAME_FRARMENT = 'pfirman';
 const TAX_YEAR = 2020;
+const MIN_CID = 0;
+const MAX_CID = 115; // Has been unsuccessful after ~110.
 
+const CIDS = [];
+// Could specify certain CIDs above, comment out loop below if so.
+for(let cid = MIN_CID; cid <= MAX_CID; cid++) {
+  CIDS.push(cid);
+}
+
+
+/**    Process values    */
+const HOST = 'propaccess.trueautomation.com';
+let SESSION_ID;
 const FILE_OUT = {
   _date: new Date(),
   search: {
@@ -28,20 +38,27 @@ const FILE_OUT = {
 };
 Object.preventExtensions(FILE_OUT);
 
-/**    Process values    */
-const HOST = 'propaccess.trueautomation.com';
-let SESSION_ID;
 
+/*
+    Per CID:
+      1. Ping server -> get session-token -> set as header cookie.
+      2. POST desired data as form-data (https://propaccess.trueautomation.com/clientdb/propertysearch.aspx?cid=50).
+      3. GET html data.
+      4. Extract houses' ids from DOM.
+      5. Print status (by default, read TODO below).
+    END LOOP.
 
-/**    Main    */
+    END Process.
+      default: print out data as JSON.
+      TODO custom output.
+*/
 (async function() {
 
-  /**   Scrape loop   */
-  for(let cid = MIN_CID; cid < MAX_CID; cid++) {
+  for(cid of CIDS) {
     try {
       await scrapeCid(cid);
-    } catch (e) {
 
+    } catch (e) {
       /**   Second try   */
       try {
         await scrapeCid(cid);
@@ -55,56 +72,35 @@ let SESSION_ID;
     }
   }
   
-  /**   Process End   */
+  /**   Process Ends   */
   if (FILE_OUT.cid_not_scrapped_due_double_failure.length > 0) {
     await allFailedLastShot();
   }
   console.log( JSON.stringify(FILE_OUT, null, '\t') ); // Format by tabs.
-
 })();
 
-function allFailedLastShot() {
-  const { cid_not_scrapped_due_double_failure: cids_retry } = FILE_OUT;
-  return new Promise (async (reso, reje) => {
-    for(let cid = 0; cid < cids_retry.length; cid++ ) {
-      try {
-        await scrapeCid(cid)
-        FILE_OUT.cid_not_scrapped_due_double_failure.splice( cids_retry.indexOf(cid), 1);
-        reso();
-      } catch (e) {
-        reje();
-      }
-    }
-  })
-}
-
-function sleep(s) {
-  return new Promise(res => {
-    setTimeout(() => res(), s);
-  });
-}
-
-/**
-
-  Per CID:
-    1. Ping server -> get session-token -> set as header cookie.
-    2. POST desired data as form-data (https://propaccess.trueautomation.com/clientdb/propertysearch.aspx?cid=50).
-    3. GET html data.
-    4. Extract houses' ids from DOM.
-    5. Print status (by default, read TODO below).
-  END LOOP.
-
-  END Process.
-    default: print data.
-    TODO either of create json file / print, or both.
-
-*/
 
 /**
 
   Functions.
 
 */
+function allFailedLastShot() {
+  console.log('Beggining allFailedLastShot()');
+  const { cid_not_scrapped_due_double_failure: cids_retry } = FILE_OUT;
+  return new Promise (async (resolve, reject) => {
+    for(cid of cids_retry) {
+      try {
+        await scrapeCid(cid);
+        FILE_OUT.cid_not_scrapped_due_double_failure.splice( cids_retry.indexOf(cid), 1);
+      } catch (e) {
+        //
+      }
+    }
+    resolve();
+  })
+}
+
 async function scrapeCid(cid) {
   try {
     await setNewSessionId(cid);
@@ -234,4 +230,10 @@ function setNewSessionId(cid) {
     
     req.end();
   })
+}
+
+function sleep(s) {
+  return new Promise(res => {
+    setTimeout(() => res(), s);
+  });
 }
