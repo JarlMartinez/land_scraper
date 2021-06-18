@@ -1,0 +1,270 @@
+{
+	"_date": "2021-06-18T20:04:53.703Z",
+	"search": {
+		"cids_range": "0-115",
+		"owner": "pfirman",
+		"tax_year": 2020
+	},
+	"cid_not_scrapped_due_double_failure": [
+		36,
+		78,
+		94,
+		108,
+		111,
+		112,
+		113,
+		114,
+		115
+	],
+	"total_lands_found": 50,
+	"data": [
+		{
+			"cid": 4,
+			"total_lands": 1,
+			"lands": [
+				{
+					"id": "24912",
+					"website": "https://propaccess.trueautomation.com/clientdb/Property.aspx?cid=4&prop_id=24912"
+				}
+			]
+		},
+		{
+			"cid": 22,
+			"total_lands": 1,
+			"lands": [
+				{
+					"id": "56256",
+					"website": "https://propaccess.trueautomation.com/clientdb/Property.aspx?cid=22&prop_id=56256"
+				}
+			]
+		},
+		{
+			"cid": 51,
+			"total_lands": 5,
+			"lands": [
+				{
+					"id": "164760",
+					"website": "https://propaccess.trueautomation.com/clientdb/Property.aspx?cid=51&prop_id=164760"
+				},
+				{
+					"id": "229470",
+					"website": "https://propaccess.trueautomation.com/clientdb/Property.aspx?cid=51&prop_id=229470"
+				},
+				{
+					"id": "231372",
+					"website": "https://propaccess.trueautomation.com/clientdb/Property.aspx?cid=51&prop_id=231372"
+				},
+				{
+					"id": "247200",
+					"website": "https://propaccess.trueautomation.com/clientdb/Property.aspx?cid=51&prop_id=247200"
+				},
+				{
+					"id": "517196",
+					"website": "https://propaccess.trueautomation.com/clientdb/Property.aspx?cid=51&prop_id=517196"
+				}
+			]
+		},
+		{
+			"cid": 81,
+			"total_lands": 38,
+			"lands": [
+				{
+					"id": "391848",
+					"website": "https://propaccess.trueautomation.com/clientdb/Property.aspx?cid=81&prop_id=391848"
+				},
+				{
+					"id": "434178",
+					"website": "https://propaccess.trueautomation.com/clientdb/Property.aspx?cid=81&prop_id=434178"
+				},
+				{
+					"id": "100928",
+					"website": "https://propaccess.trueautomation.com/clientdb/Property.aspx?cid=81&prop_id=100928"
+				},
+				{
+					"id": "125435",
+					"website": "https://propaccess.trueautomation.com/clientdb/Property.aspx?cid=81&prop_id=125435"
+				},
+				{
+					"id": "131966",
+					"website": "https://propaccess.trueautomation.com/clientdb/Property.aspx?cid=81&prop_id=131966"
+				},
+				{
+					"id": "150372",
+					"website": "https://propaccess.trueautomation.com/clientdb/Property.aspx?cid=81&prop_id=150372"
+				},
+				{
+					"id": "163985",
+					"website": "https://propaccess.trueautomation.com/clientdb/Property.aspx?cid=81&prop_id=163985"
+				},
+				{
+					"id": "164473",
+					"website": "https://propaccess.trueautomation.com/clientdb/Property.aspx?cid=81&prop_id=164473"
+				},
+				{
+					"id": "164716",
+					"website": "https://propaccess.trueautomation.com/clientdb/Property.aspx?cid=81&prop_id=164716"
+				},
+				{
+					"id": "170022",
+					"website": "https://propaccess.trueautomation.com/clientdb/Property.aspx?cid=81&prop_id=170022"
+				},
+				{
+					"id": "176200",
+					"website": "https://propaccess.trueautomation.com/clientdb/Property.aspx?cid=81&prop_id=176200"
+				},
+				{
+					"id": "186010",
+					"website": "https://propaccess.trueautomation.com/clientdb/Property.aspx?cid=81&prop_id=186010"
+				},
+				{
+					"id": "187933",
+					"website": "https://propaccess.trueautomation.com/clientdb/Property.aspx?cid=81&prop_id=187933"
+				},
+				{
+					"id": "194797",
+					"website": "https://propaccess.trueautomation.com/clientdb/Property.aspx?cid=81&prop_id=194797"
+				},
+				{
+					"id": "196104",
+					"website": "https://propaccess.trueautomation.com/clientdb/Property.aspx?cid=81&prop_id=196104"
+				},
+				{
+					"id": "197116",
+					"website": "https://propaccess.trueautomation.com/clientdb/Property.aspx?cid=81&prop_id=197116"
+				},
+				{
+					"id": "197998",
+					"website": "https://propaccess.trueautomation.com/clientdb/Property.aspx?cid=81&prop_id=197998"
+				},
+				{
+					"id": "198012",
+					"website": "https://propaccess.trueautomation.com/clientdb/Property.aspx?cid=81&prop_id=198012"
+				},
+				{
+					"id": "198454",
+					"website": "https://propaccess.trueautomation.com/clientdb/Property.aspx?cid=81&prop_id=198454"
+				},
+				{
+					"id": "198580",
+					"website": "https://propaccess.trueautomation.com/clientdb/Property.aspx?cid=81&prop_id=198580"
+				},
+				{
+					"id": "198825",
+					"website": "https://propaccess.trueautomation.com/clientdb/Property.aspx?cid=81&prop_id=198825"
+				},
+				{
+					"id": "198826",
+					"website": "https://propaccess.trueautomation.com/clientdb/Property.aspx?cid=81&prop_id=198826"
+				},
+				{
+					"id": "198885",
+					"website": "https://propaccess.trueautomation.com/clientdb/Property.aspx?cid=81&prop_id=198885"
+				},
+				{
+					"id": "199295",
+					"website": "https://propaccess.trueautomation.com/clientdb/Property.aspx?cid=81&prop_id=199295"
+				},
+				{
+					"id": "199819",
+					"website": "https://propaccess.trueautomation.com/clientdb/Property.aspx?cid=81&prop_id=199819"
+				},
+				{
+					"id": "199822",
+					"website": "https://propaccess.trueautomation.com/clientdb/Property.aspx?cid=81&prop_id=199822"
+				},
+				{
+					"id": "200210",
+					"website": "https://propaccess.trueautomation.com/clientdb/Property.aspx?cid=81&prop_id=200210"
+				},
+				{
+					"id": "200211",
+					"website": "https://propaccess.trueautomation.com/clientdb/Property.aspx?cid=81&prop_id=200211"
+				},
+				{
+					"id": "207429",
+					"website": "https://propaccess.trueautomation.com/clientdb/Property.aspx?cid=81&prop_id=207429"
+				},
+				{
+					"id": "213177",
+					"website": "https://propaccess.trueautomation.com/clientdb/Property.aspx?cid=81&prop_id=213177"
+				},
+				{
+					"id": "223803",
+					"website": "https://propaccess.trueautomation.com/clientdb/Property.aspx?cid=81&prop_id=223803"
+				},
+				{
+					"id": "224242",
+					"website": "https://propaccess.trueautomation.com/clientdb/Property.aspx?cid=81&prop_id=224242"
+				},
+				{
+					"id": "225247",
+					"website": "https://propaccess.trueautomation.com/clientdb/Property.aspx?cid=81&prop_id=225247"
+				},
+				{
+					"id": "226691",
+					"website": "https://propaccess.trueautomation.com/clientdb/Property.aspx?cid=81&prop_id=226691"
+				},
+				{
+					"id": "227427",
+					"website": "https://propaccess.trueautomation.com/clientdb/Property.aspx?cid=81&prop_id=227427"
+				},
+				{
+					"id": "232565",
+					"website": "https://propaccess.trueautomation.com/clientdb/Property.aspx?cid=81&prop_id=232565"
+				},
+				{
+					"id": "232676",
+					"website": "https://propaccess.trueautomation.com/clientdb/Property.aspx?cid=81&prop_id=232676"
+				},
+				{
+					"id": "381133",
+					"website": "https://propaccess.trueautomation.com/clientdb/Property.aspx?cid=81&prop_id=381133"
+				}
+			]
+		},
+		{
+			"cid": 91,
+			"total_lands": 1,
+			"lands": [
+				{
+					"id": "124119",
+					"website": "https://propaccess.trueautomation.com/clientdb/Property.aspx?cid=91&prop_id=124119"
+				}
+			]
+		},
+		{
+			"cid": 92,
+			"total_lands": 2,
+			"lands": [
+				{
+					"id": "14126",
+					"website": "https://propaccess.trueautomation.com/clientdb/Property.aspx?cid=92&prop_id=14126"
+				},
+				{
+					"id": "23031",
+					"website": "https://propaccess.trueautomation.com/clientdb/Property.aspx?cid=92&prop_id=23031"
+				}
+			]
+		},
+		{
+			"cid": 95,
+			"total_lands": 1,
+			"lands": [
+				{
+					"id": "24912",
+					"website": "https://propaccess.trueautomation.com/clientdb/Property.aspx?cid=95&prop_id=24912"
+				}
+			]
+		},
+		{
+			"cid": 110,
+			"total_lands": 1,
+			"lands": [
+				{
+					"id": "176092",
+					"website": "https://propaccess.trueautomation.com/clientdb/Property.aspx?cid=110&prop_id=176092"
+				}
+			]
+		}
+	]
+}
