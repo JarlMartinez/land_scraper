@@ -20,12 +20,11 @@ const successfull_retries = [];
 const scrapes_skipped = [];
 
 
-/**    Main Function    */
+/**    Main    */
 (async function() {
 
   /**   Scrape loop   */
   for(let cid = MIN_CID; cid < MAX_CID; cid++) {
-
     try {
       await scrapeCid(cid);
       console.log(`CID scraped: ${cid}\nProperties accumulated: ${ALL_PROPERTIES.length}\n`);
@@ -50,6 +49,7 @@ const scrapes_skipped = [];
   /**   Process End   */
   console.log(PROPERTIES_BY_CID, '\n');
   console.log('CIDs skipped', scrapes_skipped, '\n');
+
 })();
 
 function sleep(s) {
