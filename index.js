@@ -54,11 +54,29 @@ let SESSION_ID;
         await sleep(1000);
     }
   }
-
+  
   /**   Process End   */
+  if (FILE_OUT.cid_not_scrapped_due_double_failure.length > 0) {
+    await allFailedLastShot();
+  }
   console.log( JSON.stringify(FILE_OUT, null, '\t') ); // Format by tabs.
 
 })();
+
+function allFailedLastShot() {
+  const { cid_not_scrapped_due_double_failure: cids_retry } = FILE_OUT;
+  return new Promise (async (reso, reje) => {
+    for(let cid = 0; cid < cids_retry.length; cid++ ) {
+      try {
+        await scrapeCid(cid)
+        FILE_OUT.cid_not_scrapped_due_double_failure.splice( cids_retry.indexOf(cid), 1);
+        reso();
+      } catch (e) {
+        reje();
+      }
+    }
+  })
+}
 
 function sleep(s) {
   return new Promise(res => {
