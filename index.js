@@ -1,23 +1,36 @@
 const https = require('https');
 const { JSDOM } = require('jsdom');
 
-// TODO dont require jsdom.
+// TODO
+//    extract from DOM the last db update date.
+//    -op --open <cid_website>
+//    -v --verbose
+//    -o --output </new/file/data.json
+//    -h --help
 
 
 /**    Main variables    */
 const MIN_CID = 0;
-const MAX_CID = 120; // Has been unsuccessfull after ~180.
+const MAX_CID = 115; // Has been unsuccessfull after ~110.
 const OWNER_NAME_FRARMENT = 'pfirman';
+const TAX_YEAR = 2020;
 
+const FILE_OUT = {
+  _date: new Date(),
+  search: {
+    cids_range: `${MIN_CID}-${MAX_CID}`,
+    owner: OWNER_NAME_FRARMENT,
+    tax_year: TAX_YEAR,
+  },
+  cid_not_scrapped_due_double_failure: [],
+  total_lands_found: 0,
+  data: [],
+};
+Object.preventExtensions(FILE_OUT);
 
 /**    Process values    */
 const HOST = 'propaccess.trueautomation.com';
 let SESSION_ID;
-let ALL_PROPERTIES = [];
-const PROPERTIES_BY_CID = {};
-const scrapes_failed = [];
-const successfull_retries = [];
-const scrapes_skipped = [];
 
 
 /**    Main    */
@@ -27,28 +40,23 @@ const scrapes_skipped = [];
   for(let cid = MIN_CID; cid < MAX_CID; cid++) {
     try {
       await scrapeCid(cid);
-      console.log(`CID scraped: ${cid}\nProperties accumulated: ${ALL_PROPERTIES.length}\n`);
     } catch (e) {
-      scrapes_failed.push(cid);
-      console.log(`ERROR - CID ${cid}\n${e}\nRetrying...\n`);
+
       /**   Second try   */
       try {
         await scrapeCid(cid);
-        successfull_retries.push(cid);
-        console.log(`CID scraped: ${cid}\nProperties accumulated: ${ALL_PROPERTIES.length}\n`);
       } catch (e) {
-        scrapes_skipped.push(cid);
-        console.log(`2nd ERROR on CID ${cid}\n${e}...Skipping CID ${cid}...\n`);
+        FILE_OUT.cid_not_scrapped_due_double_failure.push(cid);
       }
+      
     } finally {
         /**    Dont soak server - avoid getting banned.    */
-        await sleep(0);
+        await sleep(1000);
     }
   }
 
   /**   Process End   */
-  console.log(PROPERTIES_BY_CID, '\n');
-  console.log('CIDs skipped', scrapes_skipped, '\n');
+  console.log( JSON.stringify(FILE_OUT, null, '\t') ); // Format by tabs.
 
 })();
 
@@ -84,11 +92,24 @@ async function scrapeCid(cid) {
     await setNewSessionId(cid);
     await postSearch(cid);
     const html = await getSearch(cid);
-    const cid_properties = getPropertiesIds(html);
-    ALL_PROPERTIES = [...ALL_PROPERTIES, ...cid_properties];
-    if (cid_properties.length > 0) {
-      PROPERTIES_BY_CID[cid] = [...cid_properties] 
+    const cid_properties_ids = getPropertiesIds(html);
+
+    if (cid_properties_ids.length > 0) {
+      /**    Data    */
+      FILE_OUT.total_lands_found += cid_properties_ids.length;
+      FILE_OUT.data = [
+        ...FILE_OUT.data,
+        {
+          cid: cid,
+          total_lands: cid_properties_ids.length,
+          lands: cid_properties_ids.map(id => ({
+              id,
+              website: `https://${HOST}/clientdb/Property.aspx?cid=${cid}&prop_id=${id}`
+          })),
+        },
+      ];
     }
+
   } catch (e) {
     throw e;
   }
@@ -166,7 +187,7 @@ function postSearch(cid) {
     
     req.on('error', e => reject(`[ postSearch() error ] ${e.message}`));
 
-    const data = `__EVENTTARGET=&__EVENTARGUMENT=&__VIEWSTATE=%2FwEPDwULLTEyMjcyNTA4MjUPZBYCZg9kFgICAw9kFg4CBw9kFgICAQ8PFgIeBFRleHQFQEVudGVyIG9uZSBvciBtb3JlIHNlYXJjaCBpdGVtcy4gIENsaWNrICJCYXNpYyIgZm9yIGxlc3Mgb3B0aW9ucy5kZAIJDxYCHgdWaXNpYmxlaGQCCw8WAh8BaGQCDQ9kFggCAQ8PZBYCHgVzdHlsZQUOZGlzcGxheTpibG9jazsWAgIBDw9kFgIfAgUOZGlzcGxheTpibG9jaztkAgIPD2QWAh8CBQ5kaXNwbGF5OmJsb2NrOxYCAgMPD2QWAh8CBQ5kaXNwbGF5OmJsb2NrO2QCAw8PZBYCHwIFDmRpc3BsYXk6YmxvY2s7FgICAw8PZBYCHwIFDmRpc3BsYXk6YmxvY2s7ZAIEDw9kFgIfAgUOZGlzcGxheTpibG9jaztkAg8PFgIfAgUOZGlzcGxheTpibG9jaztkAhEPZBYCAgIPZBYIZg8PZBYCHwIFDmRpc3BsYXk6YmxvY2s7ZAIBDw9kFgIfAgUOZGlzcGxheTpibG9jaztkAgIPD2QWAh8CBQ5kaXNwbGF5OmJsb2NrO2QCAw8PZBYCHwIFDmRpc3BsYXk6YmxvY2s7ZAITDxYCHwFnZGTfS5vsIa7kZj0vBEFSJ0mCSu%2BXvA%3D%3D&__VIEWSTATEGENERATOR=90EF699E&__EVENTVALIDATION=%2FwEWLgKD2%2BqBCAKAuK2zAwKG5ZDeAgLRjKCYCwLL6tOoCwKtl6K5CQLj75mjBALH5cidBwLA6r%2BYCQLlkpHJDQKpzZHiDgLk66LTAQLBvPaTBAK%2Bjrf3AgLBn%2B7PAwLBn5KrDALciOyDDwLciJDvBwLciMSHBQLciOjgDQLciJzMBgLciICpDwLciLSSCALciNh%2FAtyIzNgJAtyI8IUCArexwpwFArex9vkNArex2pALAqqo3%2B0LAoiIu%2BgNArSIo%2FYNArSI2%2FYNAqeIu%2BgNArmIu%2BgNAsfUp80PAoWwoaQGAqzGsccDAsLcudwFAv2CkoQCAviCroQCAvqCkoQCAtrDydMFAtvDvdAFAq6A6e4IAsSm9%2FwMwR9waWVV9q3cLD%2FzQYBdJt6BtEM%3D&propertySearchOptions%3AownerName=${OWNER_NAME_FRARMENT}&propertySearchOptions%3AstreetNumber=&propertySearchOptions%3AstreetName=&propertySearchOptions%3Apropertyid=&propertySearchOptions%3Ageoid=&propertySearchOptions%3Adba=&propertySearchOptions%3Aabstract=&propertySearchOptions%3Asubdivision=&propertySearchOptions%3AmobileHome=&propertySearchOptions%3Acondo=&propertySearchOptions%3AagentCode=&propertySearchOptions%3Ataxyear=2021&propertySearchOptions%3ApropertyType=All&propertySearchOptions%3AorderResultsBy=Owner+Name&propertySearchOptions%3ArecordsPerPage=250&propertySearchOptions%3AsearchAdv=Search`;
+    const data = `__EVENTTARGET=&__EVENTARGUMENT=&__VIEWSTATE=%2FwEPDwULLTEyMjcyNTA4MjUPZBYCZg9kFgICAw9kFg4CBw9kFgICAQ8PFgIeBFRleHQFQEVudGVyIG9uZSBvciBtb3JlIHNlYXJjaCBpdGVtcy4gIENsaWNrICJCYXNpYyIgZm9yIGxlc3Mgb3B0aW9ucy5kZAIJDxYCHgdWaXNpYmxlaGQCCw8WAh8BaGQCDQ9kFggCAQ8PZBYCHgVzdHlsZQUOZGlzcGxheTpibG9jazsWAgIBDw9kFgIfAgUOZGlzcGxheTpibG9jaztkAgIPD2QWAh8CBQ5kaXNwbGF5OmJsb2NrOxYCAgMPD2QWAh8CBQ5kaXNwbGF5OmJsb2NrO2QCAw8PZBYCHwIFDmRpc3BsYXk6YmxvY2s7FgICAw8PZBYCHwIFDmRpc3BsYXk6YmxvY2s7ZAIEDw9kFgIfAgUOZGlzcGxheTpibG9jaztkAg8PFgIfAgUOZGlzcGxheTpibG9jaztkAhEPZBYCAgIPZBYIZg8PZBYCHwIFDmRpc3BsYXk6YmxvY2s7ZAIBDw9kFgIfAgUOZGlzcGxheTpibG9jaztkAgIPD2QWAh8CBQ5kaXNwbGF5OmJsb2NrO2QCAw8PZBYCHwIFDmRpc3BsYXk6YmxvY2s7ZAITDxYCHwFnZGTfS5vsIa7kZj0vBEFSJ0mCSu%2BXvA%3D%3D&__VIEWSTATEGENERATOR=90EF699E&__EVENTVALIDATION=%2FwEWLgKD2%2BqBCAKAuK2zAwKG5ZDeAgLRjKCYCwLL6tOoCwKtl6K5CQLj75mjBALH5cidBwLA6r%2BYCQLlkpHJDQKpzZHiDgLk66LTAQLBvPaTBAK%2Bjrf3AgLBn%2B7PAwLBn5KrDALciOyDDwLciJDvBwLciMSHBQLciOjgDQLciJzMBgLciICpDwLciLSSCALciNh%2FAtyIzNgJAtyI8IUCArexwpwFArex9vkNArex2pALAqqo3%2B0LAoiIu%2BgNArSIo%2FYNArSI2%2FYNAqeIu%2BgNArmIu%2BgNAsfUp80PAoWwoaQGAqzGsccDAsLcudwFAv2CkoQCAviCroQCAvqCkoQCAtrDydMFAtvDvdAFAq6A6e4IAsSm9%2FwMwR9waWVV9q3cLD%2FzQYBdJt6BtEM%3D&propertySearchOptions%3AownerName=${OWNER_NAME_FRARMENT}&propertySearchOptions%3AstreetNumber=&propertySearchOptions%3AstreetName=&propertySearchOptions%3Apropertyid=&propertySearchOptions%3Ageoid=&propertySearchOptions%3Adba=&propertySearchOptions%3Aabstract=&propertySearchOptions%3Asubdivision=&propertySearchOptions%3AmobileHome=&propertySearchOptions%3Acondo=&propertySearchOptions%3AagentCode=&propertySearchOptions%3Ataxyear=${TAX_YEAR}&propertySearchOptions%3ApropertyType=All&propertySearchOptions%3AorderResultsBy=Owner+Name&propertySearchOptions%3ArecordsPerPage=250&propertySearchOptions%3AsearchAdv=Search`;
     req.write(data);
     req.end();
 
