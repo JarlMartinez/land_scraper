@@ -86,7 +86,6 @@ Object.preventExtensions(FILE_OUT);
 
 */
 function allFailedLastShot() {
-  console.log('Beggining allFailedLastShot()');
   const { cid_not_scrapped_due_double_failure: cids_retry } = FILE_OUT;
   return new Promise (async (resolve, reject) => {
     for(cid of cids_retry) {
