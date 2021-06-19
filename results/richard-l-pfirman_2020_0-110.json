@@ -1,0 +1,21 @@
+{
+	"_date": "2021-06-19T00:18:54.983Z",
+	"search": {
+		"cids_range": "0-115",
+		"owner": "richard l pfirman",
+		"tax_year": 2020
+	},
+	"cid_not_scrapped_due_double_failure": [
+		36,
+		78,
+		94,
+		108,
+		111,
+		112,
+		113,
+		114,
+		115
+	],
+	"total_lands_found": 0,
+	"data": []
+}

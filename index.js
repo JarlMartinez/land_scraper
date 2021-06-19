@@ -10,7 +10,7 @@ const { JSDOM } = require('jsdom');
 
 
 /**    Main variables    */
-const OWNER_NAME_FRARMENT = 'pfirman';
+const OWNER_NAME_FRARMENT = 'richard l pfirman';
 const TAX_YEAR = 2020;
 const MIN_CID = 0;
 const MAX_CID = 115; // Has been unsuccessful after ~110.
